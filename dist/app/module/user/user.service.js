@@ -12,6 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userService = void 0;
 const user_model_1 = require("./user.model");
 const createUserIntoDb = (userData) => __awaiter(void 0, void 0, void 0, function* () {
+    // if (await User.isExists(userData.userId)) {
+    // 	throw new Error("User already exists");
+    // }
     const result = yield user_model_1.User.create(userData);
     return result;
 });
@@ -33,13 +36,16 @@ const getSingleUserFromDB = (userId) => __awaiter(void 0, void 0, void 0, functi
         email: 1,
         address: 1,
     });
-    if (result == null) {
-        throw new Error("This user doesn't exist");
-    }
+    // if (await User.isExists(userId)) {
+    // 	throw new Error("User doesn't exists");
+    // }
     return result;
 });
 const deleteSingleUserFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.User.updateOne({ userId }, { isDeleted: true });
+    // if (await User.isExists(userId)) {
+    // 	throw new Error("User doesn't exists");
+    // }
     return result;
 });
 exports.userService = {

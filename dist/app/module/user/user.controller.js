@@ -30,6 +30,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(500).json({
             success: false,
             message: err.message || "User creation failed",
+            data: err,
         });
     }
 });
@@ -72,7 +73,7 @@ const deleteSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
         const result = yield user_service_1.userService.deleteSingleUserFromDB(userId);
         res.status(200).json({
             success: true,
-            message: "User fetched successfully",
+            message: "User deleted successfully",
             data: result,
         });
     }

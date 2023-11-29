@@ -1,21 +1,21 @@
 import { z } from "zod";
 
 const userValidateSchema = z.object({
-	userId: z.number(),
-	username: z.string(),
-	password: z.string(),
+	userId: z.number({ required_error: "Id is required" }),
+	username: z.string({ required_error: "user name is required" }),
+	password: z.string({ required_error: "password is required" }),
 	fullName: z.object({
-		firstName: z.string(),
-		lastName: z.string(),
+		firstName: z.string({ required_error: "name is required" }),
+		lastName: z.string({ required_error: "name is required" }),
 	}),
-	age: z.number(),
-	email: z.string().email(),
+	age: z.number({ required_error: "age is required" }),
+	email: z.string({ required_error: "email is required" }).email(),
 	isActive: z.boolean().default(true),
 	hobbies: z.array(z.string()).default([]),
 	address: z.object({
-		street: z.string(),
-		city: z.string(),
-		country: z.string(),
+		street: z.string({ required_error: "Address is required" }),
+		city: z.string({ required_error: "Address is required" }),
+		country: z.string({ required_error: "Address is required" }),
 	}),
 	orders: z
 		.array(

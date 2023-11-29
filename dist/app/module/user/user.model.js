@@ -121,4 +121,10 @@ exports.userSchema.pre("aggregate", function (next) {
         next();
     });
 });
+exports.userSchema.statics.isExists = function (id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const existingUser = yield exports.User.findOne({ userId: id });
+        return existingUser;
+    });
+};
 exports.User = (0, mongoose_1.model)("User", exports.userSchema);

@@ -16,6 +16,7 @@ const createUser = async (req: Request, res: Response) => {
 		res.status(500).json({
 			success: false,
 			message: err.message || "User creation failed",
+			data: err,
 		});
 	}
 };
@@ -56,7 +57,7 @@ const deleteSingleUser = async (req: Request, res: Response) => {
 		const result = await userService.deleteSingleUserFromDB(userId);
 		res.status(200).json({
 			success: true,
-			message: "User fetched successfully",
+			message: "User deleted successfully",
 			data: result,
 		});
 	} catch (err: any) {

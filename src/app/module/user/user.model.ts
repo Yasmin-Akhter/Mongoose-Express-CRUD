@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 import config from "../../config";
+import { TUser, UserModel } from "./user.interface";
 export const orderSchema = new Schema({
 	ProductName: {
 		type: String,
@@ -12,7 +13,7 @@ export const orderSchema = new Schema({
 		type: Number,
 	},
 });
-export const userSchema = new Schema({
+export const userSchema = new Schema<TUser, UserModel>({
 	userId: {
 		type: Number,
 		required: [true, "User Id is required"],
@@ -99,5 +100,9 @@ userSchema.pre("aggregate", async function (next) {
 	this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
 	next();
 });
+userSchema.statics.isExists = async function (id: number) {
+	const existingUser = await User.findOne({ userId: id });
+	return existingUser;
+};
 
-export const User = model("User", userSchema);
+export const User = model<TUser, UserModel>("User", userSchema);

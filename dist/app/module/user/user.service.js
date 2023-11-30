@@ -48,9 +48,17 @@ const deleteSingleUserFromDB = (userId) => __awaiter(void 0, void 0, void 0, fun
     // }
     return result;
 });
+const updateSingleUserIntoDB = (userId, userData) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.User.updateOne({ userId }, { $set: userData });
+    // if (await User.isExists(userId)) {
+    // 	throw new Error("User doesn't exists");
+    // }
+    return result;
+});
 exports.userService = {
     createUserIntoDb,
     getAllUserFromDB,
     getSingleUserFromDB,
     deleteSingleUserFromDB,
+    updateSingleUserIntoDB,
 };

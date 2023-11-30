@@ -43,10 +43,20 @@ const deleteSingleUserFromDB = async (userId: number) => {
 
 	return result;
 };
+const updateSingleUserIntoDB = async (userId: number, userData: TUser) => {
+	const result = await User.updateOne({ userId }, { $set: userData });
+
+	// if (await User.isExists(userId)) {
+	// 	throw new Error("User doesn't exists");
+	// }
+
+	return result;
+};
 
 export const userService = {
 	createUserIntoDb,
 	getAllUserFromDB,
 	getSingleUserFromDB,
 	deleteSingleUserFromDB,
+	updateSingleUserIntoDB,
 };

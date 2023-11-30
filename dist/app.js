@@ -11,6 +11,6 @@ app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 app.use("/api/users", user_route_1.userRoute);
 app.get("/", (req, res) => {
-    res.send("Hello World!");
+    res.send("Hello Worldddd!");
 });
 exports.default = app;

@@ -8,7 +8,7 @@ app.use(cors());
 app.use("/api/users", userRoute);
 
 app.get("/", (req: Request, res: Response) => {
-	res.send("Hello World!");
+	res.send("Hello Worldddd!");
 });
 
 export default app;

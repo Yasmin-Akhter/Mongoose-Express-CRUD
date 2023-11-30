@@ -78,10 +78,41 @@ const deleteSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
         });
     }
     catch (err) {
-        res.status(500).json({
+        // res.status(500).json({
+        // 	success: false,
+        // 	message: err.message || "User not found",
+        // });
+        throw {
             success: false,
-            message: err.message || "User not found",
+            message: "User not found",
+            err: {
+                code: 404,
+                description: "User not Found",
+            },
+        };
+    }
+});
+const updateSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = parseInt(req.params.userId, 10);
+        const { user: userData } = req.body;
+        const zodParsedData = user_validation_1.default.parse(userData);
+        const result = yield user_service_1.userService.updateSingleUserIntoDB(userId, zodParsedData);
+        res.status(200).json({
+            success: true,
+            message: "User updated successfully",
+            data: result,
         });
+    }
+    catch (err) {
+        throw {
+            success: false,
+            message: "User not found",
+            err: {
+                code: 404,
+                description: "User not Found",
+            },
+        };
     }
 });
 exports.userController = {
@@ -89,4 +120,5 @@ exports.userController = {
     getAllUser,
     getSingleUser,
     deleteSingleUser,
+    updateSingleUser,
 };

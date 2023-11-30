@@ -100,8 +100,9 @@ userSchema.pre("aggregate", async function (next) {
 	this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
 	next();
 });
-userSchema.statics.isExists = async function (id: number) {
+userSchema.statics.isExists = async function (id:number) {
 	const existingUser = await User.findOne({ userId: id });
+	console.log('existing user:',existingUser);
 	return existingUser;
 };
 

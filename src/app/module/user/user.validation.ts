@@ -1,4 +1,13 @@
 import { z } from "zod";
+const orderValidateSchema = z
+	.array(
+		z.object({
+			productName: z.string(),
+			price: z.number(),
+			quantity: z.number(),
+		})
+	)
+	.default([]);
 
 const userValidateSchema = z.object({
 	userId: z.number({ required_error: "Id is required" }),
@@ -17,15 +26,7 @@ const userValidateSchema = z.object({
 		city: z.string({ required_error: "Address is required" }),
 		country: z.string({ required_error: "Address is required" }),
 	}),
-	orders: z
-		.array(
-			z.object({
-				productName: z.string(),
-				price: z.number(),
-				quantity: z.number(),
-			})
-		)
-		.default([]),
+	orders: orderValidateSchema,
 	isDeleted: z.boolean().default(false),
 });
 

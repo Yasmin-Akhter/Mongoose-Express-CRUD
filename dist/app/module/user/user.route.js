@@ -12,4 +12,6 @@ router.get("/", user_controller_1.userController.getAllUser);
 router.get("/:userId", user_controller_1.userController.getSingleUser);
 router.delete("/:userId", user_controller_1.userController.deleteSingleUser);
 router.put("/:userId", user_controller_1.userController.updateSingleUser);
+router.put("/:userId/orders", user_controller_1.userController.updateOrders);
+router.get("/:userId/orders", user_controller_1.userController.getOrders);
 exports.userRoute = router;

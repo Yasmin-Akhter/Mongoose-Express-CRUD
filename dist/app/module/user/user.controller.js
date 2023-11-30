@@ -37,9 +37,11 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield user_service_1.userService.getAllUserFromDB();
+        const totalUser = result.length;
         res.status(200).json({
             success: true,
             message: "Users retrieved successfully",
+            total: totalUser,
             data: result,
         });
     }
@@ -54,6 +56,7 @@ const getSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const userId = parseInt(req.params.userId, 10);
         const result = yield user_service_1.userService.getSingleUserFromDB(userId);
+        console.log(userId);
         res.status(200).json({
             success: true,
             message: "Users fetched successfully",
@@ -78,18 +81,10 @@ const deleteSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
         });
     }
     catch (err) {
-        // res.status(500).json({
-        // 	success: false,
-        // 	message: err.message || "User not found",
-        // });
-        throw {
+        res.status(500).json({
             success: false,
-            message: "User not found",
-            err: {
-                code: 404,
-                description: "User not Found",
-            },
-        };
+            message: err.message || "User not found",
+        });
     }
 });
 const updateSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -105,14 +100,48 @@ const updateSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
         });
     }
     catch (err) {
-        throw {
+        res.status(500).json({
             success: false,
-            message: "User not found",
-            err: {
-                code: 404,
-                description: "User not Found",
-            },
-        };
+            message: err.message || "User not found",
+        });
+    }
+});
+const updateOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = parseInt(req.params.userId, 10);
+        const { user: userData } = req.body;
+        const userOrders = userData.orders;
+        const result = yield user_service_1.userService.updateOrdersIntoDB(userId, userOrders);
+        console.log(userId, userOrders);
+        res.status(200).json({
+            success: true,
+            message: "User updated successfully",
+            data: result,
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "User not found",
+        });
+    }
+});
+const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userId = parseInt(req.params.userId, 10);
+        const result = yield user_service_1.userService.getOrdersFromDB(userId);
+        console.log(userId);
+        res.status(200).json({
+            success: true,
+            message: "Users fetched successfully",
+            data: result,
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            success: false,
+            message: err.message || "User not found",
+        });
     }
 });
 exports.userController = {
@@ -121,4 +150,6 @@ exports.userController = {
     getSingleUser,
     deleteSingleUser,
     updateSingleUser,
+    updateOrders,
+    getOrders,
 };

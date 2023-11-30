@@ -12,9 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userService = void 0;
 const user_model_1 = require("./user.model");
 const createUserIntoDb = (userData) => __awaiter(void 0, void 0, void 0, function* () {
-    // if (await User.isExists(userData.userId)) {
-    // 	throw new Error("User already exists");
-    // }
+    if (yield user_model_1.User.isExists(userData.userId)) {
+        throw new Error("User already exists");
+    }
     const result = yield user_model_1.User.create(userData);
     return result;
 });
@@ -29,30 +29,48 @@ const getAllUserFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getSingleUserFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    // if (await User.isExists(userId)) {
+    // 	throw new Error("User doesn't exists");
+    // }
     const result = yield user_model_1.User.findOne({ userId }).select({
         username: 1,
         fullName: 1,
         age: 1,
         email: 1,
         address: 1,
+        orders: 1,
     });
-    // if (await User.isExists(userId)) {
-    // 	throw new Error("User doesn't exists");
-    // }
+    if (result == null) {
+        throw new Error("User does not exists");
+    }
     return result;
 });
 const deleteSingleUserFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.User.updateOne({ userId }, { isDeleted: true });
-    // if (await User.isExists(userId)) {
-    // 	throw new Error("User doesn't exists");
-    // }
+    if (result.modifiedCount == 0) {
+        throw new Error("User does not exists");
+    }
     return result;
 });
 const updateSingleUserIntoDB = (userId, userData) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.User.updateOne({ userId }, { $set: userData });
-    // if (await User.isExists(userId)) {
+    return result;
+});
+const updateOrdersIntoDB = (userId, userOrders) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(userId, userOrders);
+    const result = yield user_model_1.User.updateOne({ userId }, { $push: { orders: { $each: userOrders } } });
+    console.log(result);
+    return result;
+});
+const getOrdersFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.User.findOne({ userId }).select({ orders: 1 });
+    // const isUserExist = User.isExists(userId);
+    // if (!isUserExist) {
     // 	throw new Error("User doesn't exists");
     // }
+    if (result == null) {
+        throw new Error("User does not exists");
+    }
     return result;
 });
 exports.userService = {
@@ -61,4 +79,6 @@ exports.userService = {
     getSingleUserFromDB,
     deleteSingleUserFromDB,
     updateSingleUserIntoDB,
+    updateOrdersIntoDB,
+    getOrdersFromDB,
 };

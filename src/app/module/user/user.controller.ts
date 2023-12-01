@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import userValidateSchema from "./user.validation";
 import { userService } from "./user.service";
+import { ParseStatus } from "zod";
 
 const createUser = async (req: Request, res: Response) => {
 	try {
@@ -164,9 +165,11 @@ const getOrders = async (req: Request, res: Response) => {
 const getTotalPrice = async (req: Request, res: Response) => {
 	try {
 		const userId = parseInt(req.params.userId, 10);
-		const { user: userData } = req.body;
-		const userOrders = userData.orders;
+		// const { user: userData } = req.body;
+		const userOrders = req.body.user.orders;
+		// const userOrders = userData.orders;
 		const result = await userService.getTotalPriceFromDB(userId, userOrders);
+		console.log(userId);
 		res.status(200).json({
 			success: true,
 			message: "Total price calculated successfully",

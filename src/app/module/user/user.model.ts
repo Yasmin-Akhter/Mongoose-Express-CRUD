@@ -3,10 +3,10 @@ import bcrypt from "bcrypt";
 import config from "../../config";
 import { TUser, UserModel } from "./user.interface";
 export const orderSchema = new Schema({
-	ProductName: {
+	productName: {
 		type: String,
 	},
-	Price: {
+	price: {
 		type: Number,
 	},
 	quantity: {
@@ -35,11 +35,11 @@ export const userSchema = new Schema<TUser, UserModel>({
 			type: String,
 			required: [true, "first name is required"],
 			trim: true,
-			lastName: {
-				type: String,
-				required: [true, "last name is required"],
-				trim: true,
-			},
+		},
+		lastName: {
+			type: String,
+			required: [true, "last name is required"],
+			trim: true,
 		},
 	},
 	age: {
@@ -68,7 +68,10 @@ export const userSchema = new Schema<TUser, UserModel>({
 			type: String,
 		},
 	},
-	orders: [orderSchema],
+	orders: {
+		type: [orderSchema],
+		default: [],
+	},
 	isDeleted: {
 		type: Boolean,
 		default: false,

@@ -4,7 +4,6 @@ import { User } from "./user.model";
 import { any, object } from "zod";
 
 const createUserIntoDb = async (userData: TUser) => {
-	console.log(userData);
 	if (await User.isExists(userData.userId)) {
 		throw new Error("User already exists");
 	}
@@ -51,13 +50,11 @@ const updateSingleUserIntoDB = async (userId: number, userData: TUser) => {
 	const result = await User.updateOne({ userId }, { $set: userData });
 	return result;
 };
-const updateOrdersIntoDB = async (userId: number, userOrders: TOrder[]) => {
-	console.log(userId, userOrders);
+const updateOrdersIntoDB = async (userId: number, userOrders: [TOrder]) => {
 	const result = await User.updateOne(
 		{ userId },
 		{ $push: { orders: { $each: userOrders } } }
 	);
-	console.log(result);
 	return result;
 };
 
@@ -73,7 +70,7 @@ const getOrdersFromDB = async (userId: number) => {
 
 	return result;
 };
-const getTotalPriceFromDB = async (userId: number, userOrders: TOrder[]) => {
+const getTotalPriceFromDB = async (userId: number, userOrders: [TOrder]) => {
 	console.log(userId, userOrders);
 
 	let totalPrice = 0;
@@ -81,7 +78,7 @@ const getTotalPriceFromDB = async (userId: number, userOrders: TOrder[]) => {
 		totalPrice = totalPrice + order.price;
 	});
 
-	const result = await User.updateOne(
+	const result = await User.findByIdAndUpdate(
 		{ userId },
 		{ $set: { totalPrice } },
 		{ new: true }

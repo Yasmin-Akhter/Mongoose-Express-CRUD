@@ -179,9 +179,11 @@ const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 const getTotalPrice = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = parseInt(req.params.userId, 10);
-        const { user: userData } = req.body;
-        const userOrders = userData.orders;
+        // const { user: userData } = req.body;
+        const userOrders = req.body.user.orders;
+        // const userOrders = userData.orders;
         const result = yield user_service_1.userService.getTotalPriceFromDB(userId, userOrders);
+        console.log(userId);
         res.status(200).json({
             success: true,
             message: "Total price calculated successfully",

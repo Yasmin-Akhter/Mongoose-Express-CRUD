@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userService = void 0;
 const user_model_1 = require("./user.model");
 const createUserIntoDb = (userData) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(userData);
     if (yield user_model_1.User.isExists(userData.userId)) {
         throw new Error("User already exists");
     }
@@ -55,9 +54,7 @@ const updateSingleUserIntoDB = (userId, userData) => __awaiter(void 0, void 0, v
     return result;
 });
 const updateOrdersIntoDB = (userId, userOrders) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(userId, userOrders);
     const result = yield user_model_1.User.updateOne({ userId }, { $push: { orders: { $each: userOrders } } });
-    console.log(result);
     return result;
 });
 const getOrdersFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -77,7 +74,7 @@ const getTotalPriceFromDB = (userId, userOrders) => __awaiter(void 0, void 0, vo
     userOrders.forEach((order) => {
         totalPrice = totalPrice + order.price;
     });
-    const result = yield user_model_1.User.updateOne({ userId }, { $set: { totalPrice } }, { new: true });
+    const result = yield user_model_1.User.findByIdAndUpdate({ userId }, { $set: { totalPrice } }, { new: true });
     console.log(result);
     return result;
 });

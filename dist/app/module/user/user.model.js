@@ -17,10 +17,10 @@ const mongoose_1 = require("mongoose");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const config_1 = __importDefault(require("../../config"));
 exports.orderSchema = new mongoose_1.Schema({
-    ProductName: {
+    productName: {
         type: String,
     },
-    Price: {
+    price: {
         type: Number,
     },
     quantity: {
@@ -49,11 +49,11 @@ exports.userSchema = new mongoose_1.Schema({
             type: String,
             required: [true, "first name is required"],
             trim: true,
-            lastName: {
-                type: String,
-                required: [true, "last name is required"],
-                trim: true,
-            },
+        },
+        lastName: {
+            type: String,
+            required: [true, "last name is required"],
+            trim: true,
         },
     },
     age: {
@@ -82,7 +82,10 @@ exports.userSchema = new mongoose_1.Schema({
             type: String,
         },
     },
-    orders: [exports.orderSchema],
+    orders: {
+        type: [exports.orderSchema],
+        default: [],
+    },
     isDeleted: {
         type: Boolean,
         default: false,

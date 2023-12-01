@@ -86,10 +86,6 @@ exports.userSchema = new mongoose_1.Schema({
         type: [exports.orderSchema],
         default: [],
     },
-    isDeleted: {
-        type: Boolean,
-        default: false,
-    },
     totalPrice: {
         type: Number,
         default: 0,
@@ -107,26 +103,6 @@ exports.userSchema.set("toJSON", {
         delete ret.password;
         return ret;
     },
-});
-exports.userSchema.pre("find", function (next) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const query = this;
-        query.find({ isDeleted: { $ne: true } });
-        next();
-    });
-});
-exports.userSchema.pre("findOne", function (next) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const query = this;
-        query.find({ isDeleted: { $ne: true } });
-        next();
-    });
-});
-exports.userSchema.pre("aggregate", function (next) {
-    return __awaiter(this, void 0, void 0, function* () {
-        this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
-        next();
-    });
 });
 exports.userSchema.statics.isExists = function (id) {
     return __awaiter(this, void 0, void 0, function* () {

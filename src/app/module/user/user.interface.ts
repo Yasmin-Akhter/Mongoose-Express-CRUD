@@ -24,7 +24,6 @@ export type TUser = {
 		country: string;
 	};
 	orders: [TOrder];
-	isDeleted: boolean;
 	totalPrice?: number;
 };
 

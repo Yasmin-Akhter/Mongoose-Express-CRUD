@@ -72,10 +72,7 @@ export const userSchema = new Schema<TUser, UserModel>({
 		type: [orderSchema],
 		default: [],
 	},
-	isDeleted: {
-		type: Boolean,
-		default: false,
-	},
+	
 	totalPrice: {
 		type: Number,
 		default: 0,
@@ -93,20 +90,7 @@ userSchema.set("toJSON", {
 		return ret;
 	},
 });
-userSchema.pre("find", async function (next) {
-	const query = this;
-	query.find({ isDeleted: { $ne: true } });
-	next();
-});
-userSchema.pre("findOne", async function (next) {
-	const query = this;
-	query.find({ isDeleted: { $ne: true } });
-	next();
-});
-userSchema.pre("aggregate", async function (next) {
-	this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
-	next();
-});
+
 userSchema.statics.isExists = async function (id: number) {
 	const existingUser = await User.findOne({ userId: id });
 	return existingUser;

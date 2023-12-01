@@ -27,7 +27,6 @@ const userValidateSchema = z.object({
 		country: z.string({ required_error: "Address is required" }),
 	}),
 	orders: orderValidateSchema,
-	isDeleted: z.boolean().default(false),
 	totalPrice: z.number().optional().default(0),
 });
 

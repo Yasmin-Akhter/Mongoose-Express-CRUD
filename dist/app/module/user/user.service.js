@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userService = void 0;
 const user_model_1 = require("./user.model");
 const createUserIntoDb = (userData) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(userData);
     if (yield user_model_1.User.isExists(userData.userId)) {
         throw new Error("User already exists");
     }
@@ -19,7 +20,7 @@ const createUserIntoDb = (userData) => __awaiter(void 0, void 0, void 0, functio
     return result;
 });
 const getAllUserFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.User.find().select({
+    const result = yield user_model_1.User.find({}).select({
         username: 1,
         fullName: 1,
         age: 1,
@@ -29,9 +30,6 @@ const getAllUserFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getSingleUserFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    // if (await User.isExists(userId)) {
-    // 	throw new Error("User doesn't exists");
-    // }
     const result = yield user_model_1.User.findOne({ userId }).select({
         username: 1,
         fullName: 1,
@@ -46,8 +44,8 @@ const getSingleUserFromDB = (userId) => __awaiter(void 0, void 0, void 0, functi
     return result;
 });
 const deleteSingleUserFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.User.updateOne({ userId }, { isDeleted: true });
-    if (result.modifiedCount == 0) {
+    const result = yield user_model_1.User.deleteOne({ userId });
+    if (result.deletedCount == 0) {
         throw new Error("User does not exists");
     }
     return result;
@@ -73,6 +71,16 @@ const getOrdersFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* 
     }
     return result;
 });
+const getTotalPriceFromDB = (userId, userOrders) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(userId, userOrders);
+    let totalPrice = 0;
+    userOrders.forEach((order) => {
+        totalPrice = totalPrice + order.price;
+    });
+    const result = yield user_model_1.User.updateOne({ userId }, { $set: { totalPrice } }, { new: true });
+    console.log(result);
+    return result;
+});
 exports.userService = {
     createUserIntoDb,
     getAllUserFromDB,
@@ -81,4 +89,5 @@ exports.userService = {
     updateSingleUserIntoDB,
     updateOrdersIntoDB,
     getOrdersFromDB,
+    getTotalPriceFromDB,
 };

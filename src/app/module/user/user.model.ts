@@ -73,6 +73,10 @@ export const userSchema = new Schema<TUser, UserModel>({
 		type: Boolean,
 		default: false,
 	},
+	totalPrice: {
+		type: Number,
+		default: 0,
+	},
 });
 userSchema.pre("save", async function (next) {
 	const user = this;
@@ -100,9 +104,8 @@ userSchema.pre("aggregate", async function (next) {
 	this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
 	next();
 });
-userSchema.statics.isExists = async function (id:number) {
+userSchema.statics.isExists = async function (id: number) {
 	const existingUser = await User.findOne({ userId: id });
-	console.log('existing user:',existingUser);
 	return existingUser;
 };
 

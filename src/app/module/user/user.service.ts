@@ -1,8 +1,10 @@
 import express from "express";
 import { TOrder, TUser } from "./user.interface";
 import { User } from "./user.model";
+import { any, object } from "zod";
 
 const createUserIntoDb = async (userData: TUser) => {
+	console.log(userData);
 	if (await User.isExists(userData.userId)) {
 		throw new Error("User already exists");
 	}
@@ -10,7 +12,7 @@ const createUserIntoDb = async (userData: TUser) => {
 	return result;
 };
 const getAllUserFromDB = async () => {
-	const result = await User.find().select({
+	const result = await User.find({}).select({
 		username: 1,
 		fullName: 1,
 		age: 1,
@@ -21,9 +23,6 @@ const getAllUserFromDB = async () => {
 	return result;
 };
 const getSingleUserFromDB = async (userId: number) => {
-	// if (await User.isExists(userId)) {
-	// 	throw new Error("User doesn't exists");
-	// }
 	const result = await User.findOne({ userId }).select({
 		username: 1,
 		fullName: 1,
@@ -32,6 +31,7 @@ const getSingleUserFromDB = async (userId: number) => {
 		address: 1,
 		orders: 1,
 	});
+
 	if (result == null) {
 		throw new Error("User does not exists");
 	}
@@ -40,8 +40,8 @@ const getSingleUserFromDB = async (userId: number) => {
 };
 
 const deleteSingleUserFromDB = async (userId: number) => {
-	const result = await User.updateOne({ userId }, { isDeleted: true });
-	if (result.modifiedCount == 0) {
+	const result = await User.deleteOne({ userId });
+	if (result.deletedCount == 0) {
 		throw new Error("User does not exists");
 	}
 
@@ -60,6 +60,7 @@ const updateOrdersIntoDB = async (userId: number, userOrders: TOrder[]) => {
 	console.log(result);
 	return result;
 };
+
 const getOrdersFromDB = async (userId: number) => {
 	const result = await User.findOne({ userId }).select({ orders: 1 });
 	// const isUserExist = User.isExists(userId);
@@ -72,6 +73,22 @@ const getOrdersFromDB = async (userId: number) => {
 
 	return result;
 };
+const getTotalPriceFromDB = async (userId: number, userOrders: TOrder[]) => {
+	console.log(userId, userOrders);
+
+	let totalPrice = 0;
+	userOrders.forEach((order: any) => {
+		totalPrice = totalPrice + order.price;
+	});
+
+	const result = await User.updateOne(
+		{ userId },
+		{ $set: { totalPrice } },
+		{ new: true }
+	);
+	console.log(result);
+	return result;
+};
 
 export const userService = {
 	createUserIntoDb,
@@ -81,4 +98,5 @@ export const userService = {
 	updateSingleUserIntoDB,
 	updateOrdersIntoDB,
 	getOrdersFromDB,
+	getTotalPriceFromDB,
 };

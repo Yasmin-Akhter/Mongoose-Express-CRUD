@@ -87,6 +87,10 @@ exports.userSchema = new mongoose_1.Schema({
         type: Boolean,
         default: false,
     },
+    totalPrice: {
+        type: Number,
+        default: 0,
+    },
 });
 exports.userSchema.pre("save", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -124,7 +128,6 @@ exports.userSchema.pre("aggregate", function (next) {
 exports.userSchema.statics.isExists = function (id) {
     return __awaiter(this, void 0, void 0, function* () {
         const existingUser = yield exports.User.findOne({ userId: id });
-        console.log('existing user:', existingUser);
         return existingUser;
     });
 };

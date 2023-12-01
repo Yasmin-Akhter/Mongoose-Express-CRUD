@@ -27,5 +27,6 @@ const userValidateSchema = zod_1.z.object({
     }),
     orders: orderValidateSchema,
     isDeleted: zod_1.z.boolean().default(false),
+    totalPrice: zod_1.z.number().optional().default(0),
 });
 exports.default = userValidateSchema;

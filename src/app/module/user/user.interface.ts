@@ -25,6 +25,7 @@ export type TUser = {
 	};
 	orders: TOrder[];
 	isDeleted: boolean;
+	totalPrice?: number;
 };
 
 // export type userMethods = {
@@ -32,5 +33,4 @@ export type TUser = {
 // };
 export interface UserModel extends Model<TUser> {
 	isExists(id: number): Promise<TUser | null>;
-	
 }

@@ -17,7 +17,7 @@ const user_validation_1 = __importDefault(require("./user.validation"));
 const user_service_1 = require("./user.service");
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { user: userData } = req.body;
+        const userData = req.body.user;
         const zodParsedData = user_validation_1.default.parse(userData);
         const result = yield user_service_1.userService.createUserIntoDb(zodParsedData);
         res.status(200).json({

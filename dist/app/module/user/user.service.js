@@ -69,7 +69,6 @@ const getOrdersFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* 
     return result;
 });
 const getTotalPriceFromDB = (userId, userOrders) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(userId, userOrders);
     let totalPrice = 0;
     userOrders.forEach((order) => {
         totalPrice = totalPrice + order.price;

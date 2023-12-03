@@ -5,7 +5,7 @@ import { ParseStatus } from "zod";
 
 const createUser = async (req: Request, res: Response) => {
 	try {
-		const { user: userData } = req.body;
+		const userData = req.body.user;
 		const zodParsedData = userValidateSchema.parse(userData);
 		const result = await userService.createUserIntoDb(zodParsedData);
 		res.status(200).json({

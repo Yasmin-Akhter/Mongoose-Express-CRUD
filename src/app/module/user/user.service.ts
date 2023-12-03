@@ -50,7 +50,7 @@ const updateSingleUserIntoDB = async (userId: number, userData: TUser) => {
 	const result = await User.updateOne({ userId }, { $set: userData });
 	return result;
 };
-const updateOrdersIntoDB = async (userId: number, userOrders: [TOrder]) => {
+const updateOrdersIntoDB = async (userId: number, userOrders: TOrder[]) => {
 	const result = await User.updateOne(
 		{ userId },
 		{ $push: { orders: { $each: userOrders } } }
@@ -70,8 +70,8 @@ const getOrdersFromDB = async (userId: number) => {
 
 	return result;
 };
-const getTotalPriceFromDB = async (userId: number, userOrders: [TOrder]) => {
-	console.log(userId, userOrders);
+const getTotalPriceFromDB = async (userId: number, userOrders: TOrder[]) => {
+
 
 	let totalPrice = 0;
 	userOrders.forEach((order: any) => {

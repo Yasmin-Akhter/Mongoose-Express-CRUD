@@ -69,12 +69,17 @@ const getOrdersFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* 
     }
     return result;
 });
+const getUserInfoFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.User.findOne({ userId });
+    if (result == null) {
+        throw new Error("User does not exists");
+    }
+    return result;
+});
 const getTotalPriceFromDB = (userId, userData) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("orders: ", userData.orders);
     const userOrders = userData.orders;
     let totalPrice = 0;
     userOrders.forEach((order) => {
-        console.log("order.price", order.price);
         totalPrice = totalPrice + order.price * order.quantity;
     });
     const result = yield user_model_1.User.findOneAndUpdate({ userId }, { $set: { totalPrice: totalPrice } }, { new: true }).select({ totalPrice: 1 });
@@ -89,4 +94,5 @@ exports.userService = {
     updateOrdersIntoDB,
     getOrdersFromDB,
     getTotalPriceFromDB,
+    getUserInfoFromDB,
 };

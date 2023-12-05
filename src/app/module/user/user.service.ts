@@ -71,12 +71,20 @@ const getOrdersFromDB = async (userId: number) => {
 
 	return result;
 };
+const getUserInfoFromDB = async (userId: number) => {
+	const result = await User.findOne({ userId });
+
+	if (result == null) {
+		throw new Error("User does not exists");
+	}
+
+	return result;
+};
+
 const getTotalPriceFromDB = async (userId: number, userData: TUser) => {
-	console.log("orders: ", userData.orders);
 	const userOrders: TOrder[] = userData.orders;
 	let totalPrice = 0;
 	userOrders.forEach((order: TOrder) => {
-		console.log("order.price", order.price);
 		totalPrice = totalPrice + order.price * order.quantity;
 	});
 
@@ -97,4 +105,5 @@ export const userService = {
 	updateOrdersIntoDB,
 	getOrdersFromDB,
 	getTotalPriceFromDB,
+	getUserInfoFromDB,
 };

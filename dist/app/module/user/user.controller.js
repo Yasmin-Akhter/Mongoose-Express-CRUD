@@ -64,7 +64,6 @@ const getSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const userId = parseInt(req.params.userId, 10);
         const result = yield user_service_1.userService.getSingleUserFromDB(userId);
-        console.log(userId);
         res.status(200).json({
             success: true,
             message: "Users fetched successfully",
@@ -109,7 +108,6 @@ const updateSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
     try {
         const userId = parseInt(req.params.userId, 10);
         const { user: userData } = req.body;
-        console.log(req.body.user);
         const zodParsedData = user_validation_1.default.parse(userData);
         const result = yield user_service_1.userService.updateSingleUserIntoDB(userId, zodParsedData);
         res.status(200).json({
@@ -136,7 +134,6 @@ const updateOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         const { user: userData } = req.body;
         const userOrders = userData.orders;
         const result = yield user_service_1.userService.updateOrdersIntoDB(userId, userOrders);
-        console.log(userId, userOrders);
         res.status(200).json({
             success: true,
             message: "Order updated successfully",
@@ -158,7 +155,6 @@ const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = parseInt(req.params.userId, 10);
         const result = yield user_service_1.userService.getOrdersFromDB(userId);
-        console.log(userId);
         res.status(200).json({
             success: true,
             message: "Order fetched successfully",
@@ -179,9 +175,8 @@ const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const getTotalPrice = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("Incoming request:", req);
         const userId = parseInt(req.params.userId, 10);
-        const userData = yield user_service_1.userService.getSingleUserFromDB(userId);
+        const userData = yield user_service_1.userService.getUserInfoFromDB(userId);
         const result = yield user_service_1.userService.getTotalPriceFromDB(userId, userData);
         res.status(200).json({
             success: true,

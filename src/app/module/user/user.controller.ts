@@ -50,7 +50,6 @@ const getSingleUser = async (req: Request, res: Response) => {
 	try {
 		const userId = parseInt(req.params.userId, 10);
 		const result = await userService.getSingleUserFromDB(userId);
-		console.log(userId);
 		res.status(200).json({
 			success: true,
 			message: "Users fetched successfully",
@@ -94,7 +93,6 @@ const updateSingleUser = async (req: Request, res: Response) => {
 	try {
 		const userId = parseInt(req.params.userId, 10);
 		const { user: userData } = req.body;
-		console.log(req.body.user);
 		const zodParsedData = userValidateSchema.parse(userData);
 		const result = await userService.updateSingleUserIntoDB(
 			userId,
@@ -123,7 +121,6 @@ const updateOrders = async (req: Request, res: Response) => {
 		const { user: userData } = req.body;
 		const userOrders = userData.orders;
 		const result = await userService.updateOrdersIntoDB(userId, userOrders);
-		console.log(userId, userOrders);
 		res.status(200).json({
 			success: true,
 			message: "Order updated successfully",
@@ -144,7 +141,6 @@ const getOrders = async (req: Request, res: Response) => {
 	try {
 		const userId = parseInt(req.params.userId, 10);
 		const result = await userService.getOrdersFromDB(userId);
-		console.log(userId);
 		res.status(200).json({
 			success: true,
 			message: "Order fetched successfully",
@@ -164,10 +160,8 @@ const getOrders = async (req: Request, res: Response) => {
 };
 const getTotalPrice = async (req: Request, res: Response) => {
 	try {
-		console.log("Incoming request:", req);
 		const userId = parseInt(req.params.userId, 10);
-		const userData = await userService.getSingleUserFromDB(userId);
-
+		const userData = await userService.getUserInfoFromDB(userId);
 		const result = await userService.getTotalPriceFromDB(userId, userData);
 		res.status(200).json({
 			success: true,

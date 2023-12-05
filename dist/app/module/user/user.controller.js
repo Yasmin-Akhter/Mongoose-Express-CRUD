@@ -185,7 +185,7 @@ const getTotalPrice = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const result = yield user_service_1.userService.getTotalPriceFromDB(userId, userData);
         res.status(200).json({
             success: true,
-            message: "User updated successfully",
+            message: "total price calculated successfully",
             data: result,
         });
     }
@@ -201,32 +201,6 @@ const getTotalPrice = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             });
     }
 });
-// const getTotalPrice = async (req: Request, res: Response) => {
-// 	try {
-// 		const userId = parseInt(req.params.userId, 10);
-// 		console.log("userId ", userId);
-// 		const { user: userData } = req.body;
-// 		console.log("req body ", req.body);
-// 		const userOrders = userData.orders;
-// 		const result = await userService.getTotalPriceFromDB(userId, userOrders);
-// 		console.log(userId, userOrders);
-// 		res.status(200).json({
-// 			success: true,
-// 			message: " total price calculated successfully",
-// 			data: result,
-// 		});
-// 	} catch (err: any) {
-// 		console.log(err);
-// 		res.send({
-// 			success: false,
-// 			message: err.message || "User not found",
-// 			error: {
-// 				status: 404,
-// 				description: "User not found",
-// 			},
-// 		});
-// 	}
-// };
 exports.userController = {
     createUser,
     getAllUser,

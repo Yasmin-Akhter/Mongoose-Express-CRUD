@@ -17,7 +17,7 @@ const user_validation_1 = __importDefault(require("./user.validation"));
 const user_service_1 = require("./user.service");
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userData = req.body.user;
+        const { user: userData } = req.body;
         const zodParsedData = user_validation_1.default.parse(userData);
         const result = yield user_service_1.userService.createUserIntoDb(zodParsedData);
         res.status(200).json({
@@ -109,6 +109,7 @@ const updateSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
     try {
         const userId = parseInt(req.params.userId, 10);
         const { user: userData } = req.body;
+        console.log(req.body.user);
         const zodParsedData = user_validation_1.default.parse(userData);
         const result = yield user_service_1.userService.updateSingleUserIntoDB(userId, zodParsedData);
         res.status(200).json({
@@ -178,30 +179,54 @@ const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const getTotalPrice = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log("Incoming request:", req);
         const userId = parseInt(req.params.userId, 10);
-        // const { user: userData } = req.body;
-        const userOrders = req.body.user.orders;
-        // const userOrders = userData.orders;
-        const result = yield user_service_1.userService.getTotalPriceFromDB(userId, userOrders);
-        console.log(userId);
+        const userData = yield user_service_1.userService.getSingleUserFromDB(userId);
+        const result = yield user_service_1.userService.getTotalPriceFromDB(userId, userData);
         res.status(200).json({
             success: true,
-            message: "Total price calculated successfully",
+            message: "User updated successfully",
             data: result,
         });
     }
     catch (err) {
-        console.log(err);
-        res.send({
-            success: false,
-            message: err.message || "User not found",
-            error: {
-                status: 404,
-                description: "User not found",
-            },
-        });
+        res.status(404),
+            res.send({
+                success: false,
+                message: "User not found",
+                error: {
+                    status: 404,
+                    description: "User not found",
+                },
+            });
     }
 });
+// const getTotalPrice = async (req: Request, res: Response) => {
+// 	try {
+// 		const userId = parseInt(req.params.userId, 10);
+// 		console.log("userId ", userId);
+// 		const { user: userData } = req.body;
+// 		console.log("req body ", req.body);
+// 		const userOrders = userData.orders;
+// 		const result = await userService.getTotalPriceFromDB(userId, userOrders);
+// 		console.log(userId, userOrders);
+// 		res.status(200).json({
+// 			success: true,
+// 			message: " total price calculated successfully",
+// 			data: result,
+// 		});
+// 	} catch (err: any) {
+// 		console.log(err);
+// 		res.send({
+// 			success: false,
+// 			message: err.message || "User not found",
+// 			error: {
+// 				status: 404,
+// 				description: "User not found",
+// 			},
+// 		});
+// 	}
+// };
 exports.userController = {
     createUser,
     getAllUser,

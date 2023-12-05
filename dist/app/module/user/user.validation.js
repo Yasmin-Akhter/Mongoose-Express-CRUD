@@ -26,6 +26,6 @@ const userValidateSchema = zod_1.z.object({
         country: zod_1.z.string({ required_error: "Address is required" }),
     }),
     orders: orderValidateSchema,
-    // totalPrice: z.number().optional().default(0),
+    totalPrice: zod_1.z.number().optional(),
 });
 exports.default = userValidateSchema;

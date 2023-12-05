@@ -72,10 +72,9 @@ export const userSchema = new Schema<TUser, UserModel>({
 		type: [orderSchema],
 		default: [],
 	},
-	
+
 	totalPrice: {
 		type: Number,
-		default: 0,
 	},
 });
 userSchema.pre("save", async function (next) {

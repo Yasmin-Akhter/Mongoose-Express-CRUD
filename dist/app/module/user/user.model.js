@@ -88,7 +88,6 @@ exports.userSchema = new mongoose_1.Schema({
     },
     totalPrice: {
         type: Number,
-        default: 0,
     },
 });
 exports.userSchema.pre("save", function (next) {

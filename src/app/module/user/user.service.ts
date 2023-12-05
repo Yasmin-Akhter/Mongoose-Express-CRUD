@@ -12,11 +12,13 @@ const createUserIntoDb = async (userData: TUser) => {
 };
 const getAllUserFromDB = async () => {
 	const result = await User.find({}).select({
+		userId: 1,
 		username: 1,
 		fullName: 1,
 		age: 1,
 		email: 1,
 		address: 1,
+		totalPrice: 1,
 	});
 
 	return result;
@@ -28,7 +30,6 @@ const getSingleUserFromDB = async (userId: number) => {
 		age: 1,
 		email: 1,
 		address: 1,
-		orders: 1,
 	});
 
 	if (result == null) {
@@ -70,20 +71,20 @@ const getOrdersFromDB = async (userId: number) => {
 
 	return result;
 };
-const getTotalPriceFromDB = async (userId: number, userOrders: TOrder[]) => {
-
-
+const getTotalPriceFromDB = async (userId: number, userData: TUser) => {
+	console.log("orders: ", userData.orders);
+	const userOrders: TOrder[] = userData.orders;
 	let totalPrice = 0;
-	userOrders.forEach((order: any) => {
-		totalPrice = totalPrice + order.price;
+	userOrders.forEach((order: TOrder) => {
+		console.log("order.price", order.price);
+		totalPrice = totalPrice + order.price * order.quantity;
 	});
 
-	const result = await User.findByIdAndUpdate(
+	const result = await User.findOneAndUpdate(
 		{ userId },
-		{ $set: { totalPrice } },
+		{ $set: { totalPrice: totalPrice } },
 		{ new: true }
-	);
-	console.log(result);
+	).select({ totalPrice: 1 });
 	return result;
 };
 

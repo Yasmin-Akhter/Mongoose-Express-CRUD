@@ -26,7 +26,6 @@ const getAllUserFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
         age: 1,
         email: 1,
         address: 1,
-        totalPrice: 1,
     });
     return result;
 });
@@ -60,10 +59,6 @@ const updateOrdersIntoDB = (userId, userOrders) => __awaiter(void 0, void 0, voi
 });
 const getOrdersFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.User.findOne({ userId }).select({ orders: 1 });
-    // const isUserExist = User.isExists(userId);
-    // if (!isUserExist) {
-    // 	throw new Error("User doesn't exists");
-    // }
     if (result == null) {
         throw new Error("User does not exists");
     }

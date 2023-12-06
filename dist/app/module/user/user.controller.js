@@ -30,7 +30,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(404),
             res.send({
                 success: false,
-                message: "Something went wrong",
+                message: err.message || "Something went wrong",
                 error: {
                     status: 404,
                     description: "Can't create new user",
@@ -96,7 +96,7 @@ const deleteSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.status(404),
             res.send({
                 success: false,
-                message: "User not found",
+                message: err.message || "User not found",
                 error: {
                     status: 404,
                     description: "User not found",
@@ -120,7 +120,7 @@ const updateSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.status(404),
             res.send({
                 success: false,
-                message: "User not found",
+                message: err.message || "User not found",
                 error: {
                     status: 404,
                     description: "User not found",
@@ -143,10 +143,10 @@ const updateOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     catch (err) {
         res.send({
             success: false,
-            message: "User not found",
+            message: err.message || "Something went wrong",
             error: {
                 status: 404,
-                description: "User not found",
+                description: "Order updating process failed",
             },
         });
     }
@@ -165,7 +165,7 @@ const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(404),
             res.send({
                 success: false,
-                message: "orders not found",
+                message: err.message || "orders not found",
                 error: {
                     status: 404,
                     description: "orders not found",
@@ -188,10 +188,10 @@ const getTotalPrice = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(404),
             res.send({
                 success: false,
-                message: "User not found",
+                message: err.message || "Something went wrong",
                 error: {
                     status: 404,
-                    description: "User not found",
+                    description: "Total price calculation failed",
                 },
             });
     }

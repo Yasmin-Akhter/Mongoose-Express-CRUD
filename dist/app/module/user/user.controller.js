@@ -30,7 +30,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(404),
             res.send({
                 success: false,
-                message: err.message || "Something went wrong",
+                message: "Something went wrong",
                 error: {
                     status: 404,
                     description: "Can't create new user",
@@ -74,7 +74,7 @@ const getSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(404),
             res.send({
                 success: false,
-                message: err.message || "User not found",
+                message: "User not found",
                 error: {
                     status: 404,
                     description: "User not found",
@@ -89,14 +89,14 @@ const deleteSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.status(200).json({
             success: true,
             message: "User deleted successfully",
-            data: result,
+            data: null,
         });
     }
     catch (err) {
         res.status(404),
             res.send({
                 success: false,
-                message: err.message || "User not found",
+                message: "User not found",
                 error: {
                     status: 404,
                     description: "User not found",
@@ -120,7 +120,7 @@ const updateSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.status(404),
             res.send({
                 success: false,
-                message: err.message || "User not found",
+                message: "User not found",
                 error: {
                     status: 404,
                     description: "User not found",
@@ -131,19 +131,18 @@ const updateSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
 const updateOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = parseInt(req.params.userId, 10);
-        const { user: userData } = req.body;
-        const userOrders = userData.orders;
-        const result = yield user_service_1.userService.updateOrdersIntoDB(userId, userOrders);
+        const userData = req.body;
+        const result = yield user_service_1.userService.updateOrdersIntoDB(userId, userData);
         res.status(200).json({
             success: true,
             message: "Order updated successfully",
-            data: result,
+            data: null,
         });
     }
     catch (err) {
         res.send({
             success: false,
-            message: err.message || "Something went wrong",
+            message: "Something went wrong",
             error: {
                 status: 404,
                 description: "Order updating process failed",
@@ -165,7 +164,7 @@ const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(404),
             res.send({
                 success: false,
-                message: err.message || "orders not found",
+                message: "orders not found",
                 error: {
                     status: 404,
                     description: "orders not found",
@@ -188,7 +187,7 @@ const getTotalPrice = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(404),
             res.send({
                 success: false,
-                message: err.message || "Something went wrong",
+                message: "Something went wrong",
                 error: {
                     status: 404,
                     description: "Total price calculation failed",

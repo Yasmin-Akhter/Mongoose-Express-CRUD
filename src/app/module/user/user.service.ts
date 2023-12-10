@@ -1,7 +1,9 @@
 import express from "express";
 import { TOrder, TUser } from "./user.interface";
 import { User } from "./user.model";
+import bcrypt from "bcrypt";
 import { any, object } from "zod";
+import config from "../../config";
 
 const createUserIntoDb = async (userData: TUser) => {
 	if (await User.isExists(userData.userId)) {
@@ -12,7 +14,6 @@ const createUserIntoDb = async (userData: TUser) => {
 };
 const getAllUserFromDB = async () => {
 	const result = await User.find({}).select({
-		userId: 1,
 		username: 1,
 		fullName: 1,
 		age: 1,
@@ -23,12 +24,13 @@ const getAllUserFromDB = async () => {
 	return result;
 };
 const getSingleUserFromDB = async (userId: number) => {
+	const check = await User.isExists(userId);
+	if (!check) {
+		throw new Error("User doesn't exist");
+	}
 	const result = await User.findOne({ userId }).select({
-		username: 1,
-		fullName: 1,
-		age: 1,
-		email: 1,
-		address: 1,
+		orders: 0,
+		totalPrice: 0,
 	});
 
 	if (result == null) {
@@ -39,26 +41,55 @@ const getSingleUserFromDB = async (userId: number) => {
 };
 
 const deleteSingleUserFromDB = async (userId: number) => {
-	const result = await User.deleteOne({ userId });
-	if (result.deletedCount == 0) {
-		throw new Error("User does not exists");
+	const check = await User.isExists(userId);
+	if (!check) {
+		throw new Error("User doesn't exist");
 	}
+	const result = await User.deleteOne({ userId });
 
 	return result;
 };
 const updateSingleUserIntoDB = async (userId: number, userData: TUser) => {
-	const result = await User.updateOne({ userId }, { $set: userData });
-	return result;
+	const check = await User.isExists(userId);
+	if (!check) {
+		throw new Error("User doesn't exist");
+	}
+
+	if (userData.password) {
+		const hashedPass = await bcrypt.hash(
+			userData.password,
+			Number(config.salt_rounds)
+		);
+		userData.password = hashedPass;
+	}
+	const updatedUser = await User.updateOne({ userId }, { $set: userData });
+
+	if (updatedUser.modifiedCount == 1) {
+		const result = await User.find({ userId }).select({
+			orders: 0,
+			totalPrice: 0,
+		});
+		return result;
+	}
 };
+
 const updateOrdersIntoDB = async (userId: number, userOrders: TOrder[]) => {
+	const check = await User.isExists(userId);
+	if (!check) {
+		throw new Error("User doesn't exist");
+	}
 	const result = await User.updateOne(
 		{ userId },
-		{ $push: { orders: { $each: userOrders } } }
+		{ $addToSet: { orders: { $each: [userOrders] } } }
 	);
 	return result;
 };
 
 const getOrdersFromDB = async (userId: number) => {
+	const check = await User.isExists(userId);
+	if (!check) {
+		throw new Error("User doesn't exist");
+	}
 	const result = await User.findOne({ userId }).select({ orders: 1 });
 	if (result == null) {
 		throw new Error("User does not exists");
@@ -77,6 +108,10 @@ const getUserInfoFromDB = async (userId: number) => {
 };
 
 const getTotalPriceFromDB = async (userId: number, userData: TUser) => {
+	const check = await User.isExists(userId);
+	if (!check) {
+		throw new Error("User doesn't exist");
+	}
 	const userOrders: TOrder[] = userData.orders;
 	let totalPrice = 0;
 	userOrders.forEach((order: TOrder) => {

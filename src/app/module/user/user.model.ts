@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 import config from "../../config";
-import { TUser, UserModel } from "./user.interface";
+import { TOrder, TUser, UserModel } from "./user.interface";
 export const orderSchema = new Schema({
 	productName: {
 		type: String,

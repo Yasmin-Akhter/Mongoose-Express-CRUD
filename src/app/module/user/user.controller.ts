@@ -17,7 +17,7 @@ const createUser = async (req: Request, res: Response) => {
 		res.status(404),
 			res.send({
 				success: false,
-				message: err.message || "Something went wrong",
+				message: "Something went wrong",
 				error: {
 					status: 404,
 					description: "Can't create new user",
@@ -59,7 +59,7 @@ const getSingleUser = async (req: Request, res: Response) => {
 		res.status(404),
 			res.send({
 				success: false,
-				message: err.message || "User not found",
+				message: "User not found",
 				error: {
 					status: 404,
 					description: "User not found",
@@ -75,13 +75,13 @@ const deleteSingleUser = async (req: Request, res: Response) => {
 		res.status(200).json({
 			success: true,
 			message: "User deleted successfully",
-			data: result,
+			data: null,
 		});
 	} catch (err: any) {
 		res.status(404),
 			res.send({
 				success: false,
-				message: err.message || "User not found",
+				message: "User not found",
 				error: {
 					status: 404,
 					description: "User not found",
@@ -107,7 +107,7 @@ const updateSingleUser = async (req: Request, res: Response) => {
 		res.status(404),
 			res.send({
 				success: false,
-				message: err.message || "User not found",
+				message: "User not found",
 				error: {
 					status: 404,
 					description: "User not found",
@@ -118,18 +118,17 @@ const updateSingleUser = async (req: Request, res: Response) => {
 const updateOrders = async (req: Request, res: Response) => {
 	try {
 		const userId = parseInt(req.params.userId, 10);
-		const { user: userData } = req.body;
-		const userOrders = userData.orders;
-		const result = await userService.updateOrdersIntoDB(userId, userOrders);
+		const userData = req.body;
+		const result = await userService.updateOrdersIntoDB(userId, userData);
 		res.status(200).json({
 			success: true,
 			message: "Order updated successfully",
-			data: result,
+			data: null,
 		});
 	} catch (err: any) {
 		res.send({
 			success: false,
-			message: err.message || "Something went wrong",
+			message: "Something went wrong",
 			error: {
 				status: 404,
 				description: "Order updating process failed",
@@ -150,7 +149,7 @@ const getOrders = async (req: Request, res: Response) => {
 		res.status(404),
 			res.send({
 				success: false,
-				message: err.message || "orders not found",
+				message: "orders not found",
 				error: {
 					status: 404,
 					description: "orders not found",
@@ -172,7 +171,7 @@ const getTotalPrice = async (req: Request, res: Response) => {
 		res.status(404),
 			res.send({
 				success: false,
-				message: err.message || "Something went wrong",
+				message: "Something went wrong",
 				error: {
 					status: 404,
 					description: "Total price calculation failed",

@@ -106,13 +106,15 @@ const getTotalPriceFromDB = (userId, userData) => __awaiter(void 0, void 0, void
     }
     const userOrders = userData.orders;
     let totalPrice = 0;
-    // if (userOrders.length > 0) {
-    userOrders.forEach((order) => {
-        totalPrice = totalPrice + order.price * order.quantity;
-    });
-    const result = yield user_model_1.User.findOneAndUpdate({ userId }, { $set: { totalPrice: totalPrice } }, { new: true }).select({ totalPrice: 1, _id: 0 });
-    return result;
-    // } else throw new Error("No orders available");
+    if (userOrders.length > 0) {
+        userOrders.forEach((order) => {
+            totalPrice = totalPrice + order.price * order.quantity;
+        });
+        const result = yield user_model_1.User.findOneAndUpdate({ userId }, { $set: { totalPrice: totalPrice } }, { new: true }).select({ totalPrice: 1, _id: 0 });
+        return result;
+    }
+    else
+        throw new Error("No orders available");
 });
 exports.userService = {
     createUserIntoDb,

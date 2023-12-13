@@ -1,7 +1,8 @@
 import express, { Request, Response } from "express";
 import userValidateSchema from "./user.validation";
 import { userService } from "./user.service";
-import { ParseStatus } from "zod";
+import { ParseStatus, string } from "zod";
+import { TUser } from "./user.interface";
 
 const createUser = async (req: Request, res: Response) => {
 	try {
@@ -14,14 +15,26 @@ const createUser = async (req: Request, res: Response) => {
 			data: result,
 		});
 	} catch (err: any) {
-		console.log(err);
+		let errorMessage = "something went wrong";
+
+		if (
+			err.issues &&
+			Array.isArray(err.issues) &&
+			err.issues.length > 0 &&
+			err.issues[0].message
+		) {
+			errorMessage = err.issues[0].message;
+		} else if (err.message) {
+			errorMessage = err.message;
+		}
+
 		res.status(404),
 			res.send({
 				success: false,
-				message: "Something went wrong",
+				message: "Can't create new user",
 				error: {
 					status: 404,
-					description: err.message || "Can't create new user",
+					description: errorMessage,
 				},
 			});
 	}
@@ -35,12 +48,24 @@ const getAllUser = async (req: Request, res: Response) => {
 			data: result,
 		});
 	} catch (err: any) {
+		let errorMessage = "something went wrong";
+
+		if (
+			err.issues &&
+			Array.isArray(err.issues) &&
+			err.issues.length > 0 &&
+			err.issues[0].message
+		) {
+			errorMessage = err.issues[0].message;
+		} else if (err.message) {
+			errorMessage = err.message;
+		}
 		res.send({
 			success: false,
 			message: "No User found",
 			error: {
 				status: 404,
-				description: "User not found",
+				description: errorMessage,
 			},
 		});
 	}
@@ -55,15 +80,26 @@ const getSingleUser = async (req: Request, res: Response) => {
 			data: result,
 		});
 	} catch (err: any) {
-		res.status(404),
-			res.send({
-				success: false,
-				message: err.message || "User not found",
-				error: {
-					status: 404,
-					description: "User not found",
-				},
-			});
+		let errorMessage = "something went wrong";
+
+		if (
+			err.issues &&
+			Array.isArray(err.issues) &&
+			err.issues.length > 0 &&
+			err.issues[0].message
+		) {
+			errorMessage = err.issues[0].message;
+		} else if (err.message) {
+			errorMessage = err.message;
+		}
+		res.send({
+			success: false,
+			message: "No User found",
+			error: {
+				status: 404,
+				description: errorMessage,
+			},
+		});
 	}
 };
 
@@ -77,15 +113,26 @@ const deleteSingleUser = async (req: Request, res: Response) => {
 			data: null,
 		});
 	} catch (err: any) {
-		res.status(404),
-			res.send({
-				success: false,
-				message: err.message || "User not found",
-				error: {
-					status: 404,
-					description: "User not found",
-				},
-			});
+		let errorMessage = "something went wrong";
+
+		if (
+			err.issues &&
+			Array.isArray(err.issues) &&
+			err.issues.length > 0 &&
+			err.issues[0].message
+		) {
+			errorMessage = err.issues[0].message;
+		} else if (err.message) {
+			errorMessage = err.message;
+		}
+		res.send({
+			success: false,
+			message: "User not found",
+			error: {
+				status: 404,
+				description: errorMessage,
+			},
+		});
 	}
 };
 const updateSingleUser = async (req: Request, res: Response) => {
@@ -103,15 +150,26 @@ const updateSingleUser = async (req: Request, res: Response) => {
 			data: result,
 		});
 	} catch (err: any) {
-		res.status(404),
-			res.send({
-				success: false,
-				message: err.message || "User not found",
-				error: {
-					status: 404,
-					description: "User not found",
-				},
-			});
+		let errorMessage = "something went wrong";
+
+		if (
+			err.issues &&
+			Array.isArray(err.issues) &&
+			err.issues.length > 0 &&
+			err.issues[0].message
+		) {
+			errorMessage = err.issues[0].message;
+		} else if (err.message) {
+			errorMessage = err.message;
+		}
+		res.send({
+			success: false,
+			message: "No User found",
+			error: {
+				status: 404,
+				description: errorMessage,
+			},
+		});
 	}
 };
 const updateOrders = async (req: Request, res: Response) => {
@@ -125,12 +183,24 @@ const updateOrders = async (req: Request, res: Response) => {
 			data: null,
 		});
 	} catch (err: any) {
+		let errorMessage = "something went wrong";
+
+		if (
+			err.issues &&
+			Array.isArray(err.issues) &&
+			err.issues.length > 0 &&
+			err.issues[0].message
+		) {
+			errorMessage = err.issues[0].message;
+		} else if (err.message) {
+			errorMessage = err.message;
+		}
 		res.send({
 			success: false,
-			message: err.message || "Something went wrong",
+			message: "Order updating process failed",
 			error: {
 				status: 404,
-				description: "Order updating process failed",
+				description: errorMessage,
 			},
 		});
 	}
@@ -145,37 +215,61 @@ const getOrders = async (req: Request, res: Response) => {
 			data: result,
 		});
 	} catch (err: any) {
-		res.status(404),
-			res.send({
-				success: false,
-				message: err.message || "orders not found",
-				error: {
-					status: 404,
-					description: "orders not found",
-				},
-			});
+		let errorMessage = "something went wrong";
+
+		if (
+			err.issues &&
+			Array.isArray(err.issues) &&
+			err.issues.length > 0 &&
+			err.issues[0].message
+		) {
+			errorMessage = err.issues[0].message;
+		} else if (err.message) {
+			errorMessage = err.message;
+		}
+		res.send({
+			success: false,
+			message: "Orders not found",
+			error: {
+				status: 404,
+				description: errorMessage,
+			},
+		});
 	}
 };
 const getTotalPrice = async (req: Request, res: Response) => {
 	try {
 		const userId = parseInt(req.params.userId, 10);
 		const userData = await userService.getUserInfoFromDB(userId);
-		const result = await userService.getTotalPriceFromDB(userId, userData);
-		res.status(200).json({
-			success: true,
-			message: "total price calculated successfully",
-			data: result,
-		});
-	} catch (err: any) {
-		res.status(404),
-			res.send({
-				success: false,
-				message: err.message || "Something went wrong",
-				error: {
-					status: 404,
-					description: "Total price calculation failed",
-				},
+		if (userData) {
+			const result = await userService.getTotalPriceFromDB(userId, userData);
+			res.status(200).json({
+				success: true,
+				message: "total price calculated successfully",
+				data: result,
 			});
+		} else throw new Error("user not found");
+	} catch (err: any) {
+		let errorMessage = "something went wrong";
+
+		if (
+			err.issues &&
+			Array.isArray(err.issues) &&
+			err.issues.length > 0 &&
+			err.issues[0].message
+		) {
+			errorMessage = err.issues[0].message;
+		} else if (err.message) {
+			errorMessage = err.message;
+		}
+		res.send({
+			success: false,
+			message: "Total price calculating failed",
+			error: {
+				status: 404,
+				description: errorMessage,
+			},
+		});
 	}
 };
 

@@ -115,7 +115,7 @@ const getTotalPriceFromDB = async (userId: number, userData: TUser) => {
 	const userOrders: TOrder[] = userData.orders;
 
 	let totalPrice = 0;
-	// if (userOrders.length > 0) {
+	if (userOrders.length > 0) {
 	userOrders.forEach((order: TOrder) => {
 		totalPrice = totalPrice + order.price * order.quantity;
 	});
@@ -125,7 +125,7 @@ const getTotalPriceFromDB = async (userId: number, userData: TUser) => {
 		{ new: true }
 	).select({ totalPrice: 1, _id: 0 });
 	return result;
-	// } else throw new Error("No orders available");
+	} else throw new Error("No orders available");
 };
 
 export const userService = {

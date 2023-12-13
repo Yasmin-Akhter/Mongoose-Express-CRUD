@@ -27,14 +27,23 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
     catch (err) {
-        console.log(err);
+        let errorMessage = "something went wrong";
+        if (err.issues &&
+            Array.isArray(err.issues) &&
+            err.issues.length > 0 &&
+            err.issues[0].message) {
+            errorMessage = err.issues[0].message;
+        }
+        else if (err.message) {
+            errorMessage = err.message;
+        }
         res.status(404),
             res.send({
                 success: false,
-                message: "Something went wrong",
+                message: "Can't create new user",
                 error: {
                     status: 404,
-                    description: err.message || "Can't create new user",
+                    description: errorMessage,
                 },
             });
     }
@@ -49,12 +58,22 @@ const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
     catch (err) {
+        let errorMessage = "something went wrong";
+        if (err.issues &&
+            Array.isArray(err.issues) &&
+            err.issues.length > 0 &&
+            err.issues[0].message) {
+            errorMessage = err.issues[0].message;
+        }
+        else if (err.message) {
+            errorMessage = err.message;
+        }
         res.send({
             success: false,
             message: "No User found",
             error: {
                 status: 404,
-                description: "User not found",
+                description: errorMessage,
             },
         });
     }
@@ -70,15 +89,24 @@ const getSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
     catch (err) {
-        res.status(404),
-            res.send({
-                success: false,
-                message: err.message || "User not found",
-                error: {
-                    status: 404,
-                    description: "User not found",
-                },
-            });
+        let errorMessage = "something went wrong";
+        if (err.issues &&
+            Array.isArray(err.issues) &&
+            err.issues.length > 0 &&
+            err.issues[0].message) {
+            errorMessage = err.issues[0].message;
+        }
+        else if (err.message) {
+            errorMessage = err.message;
+        }
+        res.send({
+            success: false,
+            message: "No User found",
+            error: {
+                status: 404,
+                description: errorMessage,
+            },
+        });
     }
 });
 const deleteSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -92,15 +120,24 @@ const deleteSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
         });
     }
     catch (err) {
-        res.status(404),
-            res.send({
-                success: false,
-                message: err.message || "User not found",
-                error: {
-                    status: 404,
-                    description: "User not found",
-                },
-            });
+        let errorMessage = "something went wrong";
+        if (err.issues &&
+            Array.isArray(err.issues) &&
+            err.issues.length > 0 &&
+            err.issues[0].message) {
+            errorMessage = err.issues[0].message;
+        }
+        else if (err.message) {
+            errorMessage = err.message;
+        }
+        res.send({
+            success: false,
+            message: "User not found",
+            error: {
+                status: 404,
+                description: errorMessage,
+            },
+        });
     }
 });
 const updateSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -116,15 +153,24 @@ const updateSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, functio
         });
     }
     catch (err) {
-        res.status(404),
-            res.send({
-                success: false,
-                message: err.message || "User not found",
-                error: {
-                    status: 404,
-                    description: "User not found",
-                },
-            });
+        let errorMessage = "something went wrong";
+        if (err.issues &&
+            Array.isArray(err.issues) &&
+            err.issues.length > 0 &&
+            err.issues[0].message) {
+            errorMessage = err.issues[0].message;
+        }
+        else if (err.message) {
+            errorMessage = err.message;
+        }
+        res.send({
+            success: false,
+            message: "No User found",
+            error: {
+                status: 404,
+                description: errorMessage,
+            },
+        });
     }
 });
 const updateOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -139,12 +185,22 @@ const updateOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
     catch (err) {
+        let errorMessage = "something went wrong";
+        if (err.issues &&
+            Array.isArray(err.issues) &&
+            err.issues.length > 0 &&
+            err.issues[0].message) {
+            errorMessage = err.issues[0].message;
+        }
+        else if (err.message) {
+            errorMessage = err.message;
+        }
         res.send({
             success: false,
-            message: err.message || "Something went wrong",
+            message: "Order updating process failed",
             error: {
                 status: 404,
-                description: "Order updating process failed",
+                description: errorMessage,
             },
         });
     }
@@ -160,38 +216,60 @@ const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
     catch (err) {
-        res.status(404),
-            res.send({
-                success: false,
-                message: err.message || "orders not found",
-                error: {
-                    status: 404,
-                    description: "orders not found",
-                },
-            });
+        let errorMessage = "something went wrong";
+        if (err.issues &&
+            Array.isArray(err.issues) &&
+            err.issues.length > 0 &&
+            err.issues[0].message) {
+            errorMessage = err.issues[0].message;
+        }
+        else if (err.message) {
+            errorMessage = err.message;
+        }
+        res.send({
+            success: false,
+            message: "Orders not found",
+            error: {
+                status: 404,
+                description: errorMessage,
+            },
+        });
     }
 });
 const getTotalPrice = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = parseInt(req.params.userId, 10);
         const userData = yield user_service_1.userService.getUserInfoFromDB(userId);
-        const result = yield user_service_1.userService.getTotalPriceFromDB(userId, userData);
-        res.status(200).json({
-            success: true,
-            message: "total price calculated successfully",
-            data: result,
-        });
+        if (userData) {
+            const result = yield user_service_1.userService.getTotalPriceFromDB(userId, userData);
+            res.status(200).json({
+                success: true,
+                message: "total price calculated successfully",
+                data: result,
+            });
+        }
+        else
+            throw new Error("user not found");
     }
     catch (err) {
-        res.status(404),
-            res.send({
-                success: false,
-                message: err.message || "Something went wrong",
-                error: {
-                    status: 404,
-                    description: "Total price calculation failed",
-                },
-            });
+        let errorMessage = "something went wrong";
+        if (err.issues &&
+            Array.isArray(err.issues) &&
+            err.issues.length > 0 &&
+            err.issues[0].message) {
+            errorMessage = err.issues[0].message;
+        }
+        else if (err.message) {
+            errorMessage = err.message;
+        }
+        res.send({
+            success: false,
+            message: "Total price calculating failed",
+            error: {
+                status: 404,
+                description: errorMessage,
+            },
+        });
     }
 });
 exports.userController = {

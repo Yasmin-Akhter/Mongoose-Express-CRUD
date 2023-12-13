@@ -115,17 +115,17 @@ const getTotalPriceFromDB = async (userId: number, userData: TUser) => {
 	const userOrders: TOrder[] = userData.orders;
 
 	let totalPrice = 0;
-	if (userOrders.length > 0) {
-		userOrders.forEach((order: TOrder) => {
-			totalPrice = totalPrice + order.price * order.quantity;
-		});
-		const result = await User.findOneAndUpdate(
-			{ userId },
-			{ $set: { totalPrice: totalPrice } },
-			{ new: true }
-		).select({ totalPrice: 1, _id: 0 });
-		return result;
-	} else throw new Error("No orders available");
+	// if (userOrders.length > 0) {
+	userOrders.forEach((order: TOrder) => {
+		totalPrice = totalPrice + order.price * order.quantity;
+	});
+	const result = await User.findOneAndUpdate(
+		{ userId },
+		{ $set: { totalPrice: totalPrice } },
+		{ new: true }
+	).select({ totalPrice: 1, _id: 0 });
+	return result;
+	// } else throw new Error("No orders available");
 };
 
 export const userService = {

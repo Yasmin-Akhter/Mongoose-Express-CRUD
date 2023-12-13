@@ -160,12 +160,14 @@ const getTotalPrice = async (req: Request, res: Response) => {
 	try {
 		const userId = parseInt(req.params.userId, 10);
 		const userData = await userService.getUserInfoFromDB(userId);
-		const result = await userService.getTotalPriceFromDB(userId, userData);
-		res.status(200).json({
-			success: true,
-			message: "total price calculated successfully",
-			data: result,
-		});
+		if (userData) {
+			const result = await userService.getTotalPriceFromDB(userId, userData);
+			res.status(200).json({
+				success: true,
+				message: "total price calculated successfully",
+				data: result,
+			});
+		}
 	} catch (err: any) {
 		res.status(404),
 			res.send({

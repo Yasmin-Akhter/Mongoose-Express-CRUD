@@ -175,12 +175,14 @@ const getTotalPrice = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const userId = parseInt(req.params.userId, 10);
         const userData = yield user_service_1.userService.getUserInfoFromDB(userId);
-        const result = yield user_service_1.userService.getTotalPriceFromDB(userId, userData);
-        res.status(200).json({
-            success: true,
-            message: "total price calculated successfully",
-            data: result,
-        });
+        if (userData) {
+            const result = yield user_service_1.userService.getTotalPriceFromDB(userId, userData);
+            res.status(200).json({
+                success: true,
+                message: "total price calculated successfully",
+                data: result,
+            });
+        }
     }
     catch (err) {
         res.status(404),

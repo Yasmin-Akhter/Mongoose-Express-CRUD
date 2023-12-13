@@ -27,9 +27,9 @@ export type TUser = {
 	totalPrice?: number;
 };
 
-// export type userMethods = {
-// 	isExists(id: number): Promise<TUser | null>;
-// };
+export type userMethods = {
+	isExists(id: number): Promise<TUser | null>;
+};
 export interface UserModel extends Model<TUser> {
 	isExists(id: number): Promise<TUser | null>;
 }

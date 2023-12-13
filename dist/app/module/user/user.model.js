@@ -32,6 +32,7 @@ exports.userSchema = new mongoose_1.Schema({
         type: Number,
         required: [true, "User Id is required"],
         unique: true,
+        immutable: true,
     },
     username: {
         type: String,
@@ -62,6 +63,7 @@ exports.userSchema = new mongoose_1.Schema({
     email: {
         type: String,
         required: [true, "email is required"],
+        unique: true,
     },
     isActive: {
         type: Boolean,

@@ -18,6 +18,7 @@ export const userSchema = new Schema<TUser, UserModel>({
 		type: Number,
 		required: [true, "User Id is required"],
 		unique: true,
+		immutable: true,
 	},
 	username: {
 		type: String,
@@ -48,6 +49,7 @@ export const userSchema = new Schema<TUser, UserModel>({
 	email: {
 		type: String,
 		required: [true, "email is required"],
+		unique: true,
 	},
 	isActive: {
 		type: Boolean,

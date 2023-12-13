@@ -20,7 +20,11 @@ const createUserIntoDb = (userData) => __awaiter(void 0, void 0, void 0, functio
     if (yield user_model_1.User.isExists(userData.userId)) {
         throw new Error("User already exists");
     }
-    const result = yield user_model_1.User.create(userData);
+    const newUser = yield user_model_1.User.create(userData);
+    const result = yield user_model_1.User.findById(newUser.id).select({
+        orders: 0,
+        _id: 0,
+    });
     return result;
 });
 const getAllUserFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -30,6 +34,7 @@ const getAllUserFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
         age: 1,
         email: 1,
         address: 1,
+        _id: 0,
     });
     return result;
 });
@@ -41,6 +46,7 @@ const getSingleUserFromDB = (userId) => __awaiter(void 0, void 0, void 0, functi
     const result = yield user_model_1.User.findOne({ userId }).select({
         orders: 0,
         totalPrice: 0,
+        _id: 0,
     });
     if (result == null) {
         throw new Error("User does not exists");
@@ -86,17 +92,11 @@ const getOrdersFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* 
     if (!check) {
         throw new Error("User doesn't exist");
     }
-    const result = yield user_model_1.User.findOne({ userId }).select({ orders: 1 });
-    if (result == null) {
-        throw new Error("User does not exists");
-    }
+    const result = yield user_model_1.User.findOne({ userId }).select({ orders: 1, _id: 0 });
     return result;
 });
 const getUserInfoFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.User.findOne({ userId });
-    if (result == null) {
-        throw new Error("User does not exists");
-    }
     return result;
 });
 const getTotalPriceFromDB = (userId, userData) => __awaiter(void 0, void 0, void 0, function* () {
@@ -106,11 +106,15 @@ const getTotalPriceFromDB = (userId, userData) => __awaiter(void 0, void 0, void
     }
     const userOrders = userData.orders;
     let totalPrice = 0;
-    userOrders.forEach((order) => {
-        totalPrice = totalPrice + order.price * order.quantity;
-    });
-    const result = yield user_model_1.User.findOneAndUpdate({ userId }, { $set: { totalPrice: totalPrice } }, { new: true }).select({ totalPrice: 1 });
-    return result;
+    if (userOrders.length > 0) {
+        userOrders.forEach((order) => {
+            totalPrice = totalPrice + order.price * order.quantity;
+        });
+        const result = yield user_model_1.User.findOneAndUpdate({ userId }, { $set: { totalPrice: totalPrice } }, { new: true }).select({ totalPrice: 1, _id: 0 });
+        return result;
+    }
+    else
+        throw new Error("No orders available");
 });
 exports.userService = {
     createUserIntoDb,
